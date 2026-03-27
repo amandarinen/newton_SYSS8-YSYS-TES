@@ -60,24 +60,37 @@ public class TestProductRepo
         // Arrange
         var expectedCount = 1;
         var expectedCategory = "Tech";
-
         var mockConnection = new Mock<IDbConnection>();
         var mockCommand = new Mock<IDbCommand>();
         var mockReader = new Mock<IDataReader>();
-        int readCallCount = 0;
 
         mockConnection.Setup(c => c.Open());
         mockConnection.Setup(c => c.Close());
 
-        mockReader.Setup(r => r.Read()).Returns(() => readCallCount++ == 0);
-        //Id
-        mockReader.Setup(r => r.GetInt32(0)).Returns(1);
-        //Name
-        mockReader.Setup(r => r.GetString(1)).Returns("iPhone 17 Pro");
-        //Category
-        mockReader.Setup(r => r.GetString(2)).Returns("Tech");
-        //Price
-        mockReader.Setup(r => r.GetString(3)).Returns("13000");
+        mockReader.SetupSequence(r => r.Read())
+            .Returns(true)
+            .Returns(true)
+            .Returns(false);
+
+        // Id
+        mockReader.SetupSequence(r => r.GetInt32(0))
+            .Returns(1)
+            .Returns(2);
+
+        // Name
+        mockReader.SetupSequence(r => r.GetString(1))
+            .Returns("iPhone 17 Pro")
+            .Returns("Banana");
+
+        // Category
+        mockReader.SetupSequence(r => r.GetString(2))
+            .Returns("Tech")
+            .Returns("Food");
+
+        // Price 
+        mockReader.SetupSequence(r => r.GetString(3))
+            .Returns("13000")
+            .Returns("2");
 
         mockCommand.Setup(c => c.ExecuteReader()).Returns(mockReader.Object);
         mockConnection.Setup(c => c.CreateCommand()).Returns(mockCommand.Object);
