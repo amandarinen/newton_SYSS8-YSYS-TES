@@ -10,7 +10,7 @@ public sealed class ShoppingAppTestsE2EUI
     private IBrowser? _browser;
     private IBrowserContext? _context;
     private IPage? _page;
-    private readonly int _delayForClass = 2000; // Reduced delay for faster test execution
+    private readonly int _delayForClass = 2000;
 
     private readonly string _appUrl = "http://localhost";
 
